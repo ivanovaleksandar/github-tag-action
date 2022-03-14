@@ -170,7 +170,13 @@ git_refs_response=$(
 curl -s -X POST $git_refs_url \
 -H "Authorization: token $GITHUB_TOKEN" \
 -H "Accept: application/vnd.github.v3+json" \
--d '{"ref": "refs/tags/'$new'", "sha": "'$commit'"})
+-d @<(cat <<EOF
+{
+  "ref": "refs/tags/$new", 
+  "sha": "$commit"
+}
+EOF
+))
 
 git_ref_posted=$( echo "${git_refs_response}" | jq .ref | tr -d '"' )
 
